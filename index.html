@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Microphone Broadcast</title>
+</head>
+<body>
+  <h1>Microphone Broadcast Demo</h1>
+  <button id="startBtn">Start Broadcasting</button>
+
+  <script>
+    const startBtn = document.getElementById("startBtn");
+
+    startBtn.onclick = async () => {
+      try {
+        // Bước 1: Tạo AudioContext
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+        // Bước 2: Lấy âm thanh từ micro
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+        // Bước 3: Tạo MediaStreamSourceNode từ stream micro
+        const source = audioContext.createMediaStreamSource(stream);
+
+        // Bước 4: Kết nối node này đến loa
+        source.connect(audioContext.destination);
+
+        console.log("Broadcasting microphone audio...");
+      } catch (err) {
+        console.error("Error accessing microphone:", err);
+        alert("Không thể truy cập micro. Vui lòng kiểm tra quyền.");
+      }
+    };
+  </script>
+</body>
+</html>
